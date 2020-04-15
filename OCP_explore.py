@@ -5,26 +5,51 @@ import seaborn as sns
 import warnings
 
 
-def value_counter(df):
+def value_counter(df, obj_cols_only = True, unique_limit = 25):
     
-    info = 'Unprocessed variables with object dtype: '
     
-    for column in df:
-        if df[column].dtypes=='object' and len(df[column].unique()) < 25:
-            df_temp = df[column].value_counts(dropna=False).rename_axis('unique_values').reset_index(name='counts')
-            df_temp_2 =  df[column].value_counts(dropna=False,normalize=True).rename_axis('unique_values').reset_index(name='counts')
-            df_merged = df_temp.merge(df_temp_2, left_on='unique_values', right_on='unique_values')
-            df_merged.columns = ['unique_values', 'value_counts','ratio']
-            df_merged['ratio'] = df_merged['ratio'].round(3)
-            
-            print(column)                      
-            print(df_merged)
-            print('')
-            plt.show(df_merged.plot.bar(x='unique_values', y='value_counts'))
-            print('')
-            
-        elif df[column].dtypes=='object' and len(df[column].unique()) >= 25:
-            info = info + column + ', '
+    if obj_cols_only:
+    
+        info = 'Unprocessed variables with object dtype: '
+        
+        for column in df:
+            if df[column].dtypes=='object' and len(df[column].unique()) < unique_limit:
+                df_temp = df[column].value_counts(dropna=False).rename_axis('unique_values').reset_index(name='counts')
+                df_temp_2 =  df[column].value_counts(dropna=False,normalize=True).rename_axis('unique_values').reset_index(name='counts')
+                df_merged = df_temp.merge(df_temp_2, left_on='unique_values', right_on='unique_values')
+                df_merged.columns = ['unique_values', 'value_counts','ratio']
+                df_merged['ratio'] = df_merged['ratio'].round(3)
+
+                print(column)                      
+                print(df_merged)
+                print('')
+                plt.show(df_merged.plot.bar(x='unique_values', y='value_counts'))
+                print('')
+
+            elif df[column].dtypes=='object' and len(df[column].unique()) >= unique_limit:
+                info = info + column + ', '
+                
+    elif obj_cols_only == False:
+        
+        info = 'Unprocessed variables of any dtype: '
+        
+        for column in df:
+            if len(df[column].unique()) < unique_limit:
+                df_temp = df[column].value_counts(dropna=False).rename_axis('unique_values').reset_index(name='counts')
+                df_temp_2 =  df[column].value_counts(dropna=False,normalize=True).rename_axis('unique_values').reset_index(name='counts')
+                df_merged = df_temp.merge(df_temp_2, left_on='unique_values', right_on='unique_values')
+                df_merged.columns = ['unique_values', 'value_counts','ratio']
+                df_merged['ratio'] = df_merged['ratio'].round(3)
+
+                print(column)                      
+                print(df_merged)
+                print('')
+                plt.show(df_merged.plot.bar(x='unique_values', y='value_counts'))
+                print('')
+
+            elif len(df[column].unique()) >= unique_limit:
+                info = info + column + ', '
+                
         
     
     if info[-2] == ':':

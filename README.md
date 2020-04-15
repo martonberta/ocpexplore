@@ -19,12 +19,14 @@ Please use the following code to import the functions. (The recommended shortcut
 import ocpexplore.ocpexplore as expl
 ```
 ## Functions
-### value_counter(df)
+### value_counter(df, obj_cols_only = True, unique_limit = 25)
 __Purpose__\
-Apply the value counts method to those columns which has object dtype and have less then 25 unique values
+Apply the value counts method to specific columns of a dataframe
 
 __Arguments__
 * df: Pandas dataframe
+* obj_cols_only: apply function to columns with object dtype only
+* unique_limit: apply function to columns which have less unique observations than the provided limit
 
 __Output__\
 For every relevant column the function prints counts and ratios of unique values and also a barchart with for better visibility.

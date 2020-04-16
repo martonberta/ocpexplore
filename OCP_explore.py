@@ -85,8 +85,8 @@ def plot_continuous(df):
         for column in df:
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
             fig.suptitle(column)
-            sns.boxplot(df[column], ax = ax1)
-            sns.distplot(df[column], ax = ax2)
+            sns.boxplot(df[column].dropna(), ax = ax1)
+            sns.distplot(df[column].dropna(), ax = ax2)
             plt.show()
     
 
